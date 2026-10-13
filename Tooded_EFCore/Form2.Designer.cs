@@ -73,6 +73,7 @@
             txtNimetus.PlaceholderText = "Toote nimetus";
             txtNimetus.Size = new Size(200, 27);
             txtNimetus.TabIndex = 1;
+            txtNimetus.TextChanged += txtNimetus_TextChanged;
             // 
             // txtKogus
             // 

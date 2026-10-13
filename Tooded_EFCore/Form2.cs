@@ -249,7 +249,10 @@ namespace Tooded_EFCore
             MessageBox.Show("Toode on kustutatud!");
         }
 
+        private void txtNimetus_TextChanged(object sender, EventArgs e)
+        {
 
+        }
     }
 }
 

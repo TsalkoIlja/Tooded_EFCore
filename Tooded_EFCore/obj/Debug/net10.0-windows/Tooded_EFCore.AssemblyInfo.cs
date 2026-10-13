@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tooded_EFCore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c6e399130bd8252d421601ecd82c986130eca10")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c4f882734a2509d3ec9c7f7f84770960cb5833c2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tooded_EFCore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tooded_EFCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

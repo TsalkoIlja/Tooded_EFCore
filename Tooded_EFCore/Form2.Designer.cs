@@ -56,45 +56,47 @@
             // 
             // dataGridViewTooted
             // 
+            dataGridViewTooted.ColumnHeadersHeight = 29;
             dataGridViewTooted.Location = new Point(29, 223);
             dataGridViewTooted.MultiSelect = false;
             dataGridViewTooted.Name = "dataGridViewTooted";
             dataGridViewTooted.ReadOnly = true;
+            dataGridViewTooted.RowHeadersWidth = 51;
             dataGridViewTooted.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewTooted.Size = new Size(600, 300);
+            dataGridViewTooted.Size = new Size(819, 300);
             dataGridViewTooted.TabIndex = 0;
             // 
             // txtNimetus
             // 
-            txtNimetus.Location = new Point(0, 12);
+            txtNimetus.Location = new Point(0, -1);
             txtNimetus.Name = "txtNimetus";
             txtNimetus.PlaceholderText = "Toote nimetus";
-            txtNimetus.Size = new Size(200, 23);
+            txtNimetus.Size = new Size(200, 27);
             txtNimetus.TabIndex = 1;
             // 
             // txtKogus
             // 
-            txtKogus.Location = new Point(0, 53);
+            txtKogus.Location = new Point(0, 32);
             txtKogus.Name = "txtKogus";
             txtKogus.PlaceholderText = "Kogus";
-            txtKogus.Size = new Size(200, 23);
+            txtKogus.Size = new Size(200, 27);
             txtKogus.TabIndex = 2;
             txtKogus.TextChanged += txtKogus_TextChanged;
             // 
             // txtHind
             // 
-            txtHind.Location = new Point(0, 103);
+            txtHind.Location = new Point(0, 65);
             txtHind.Name = "txtHind";
             txtHind.PlaceholderText = "Hind €";
-            txtHind.Size = new Size(200, 23);
+            txtHind.Size = new Size(200, 27);
             txtHind.TabIndex = 3;
             // 
             // comboKategooria
             // 
             comboKategooria.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboKategooria.Location = new Point(221, 103);
+            comboKategooria.Location = new Point(0, 98);
             comboKategooria.Name = "comboKategooria";
-            comboKategooria.Size = new Size(200, 23);
+            comboKategooria.Size = new Size(200, 28);
             comboKategooria.TabIndex = 4;
             // 
             // picturePilt
@@ -109,7 +111,7 @@
             // 
             // btnLisa
             // 
-            btnLisa.Location = new Point(191, 164);
+            btnLisa.Location = new Point(198, 168);
             btnLisa.Name = "btnLisa";
             btnLisa.Size = new Size(150, 30);
             btnLisa.TabIndex = 7;
@@ -118,23 +120,25 @@
             // 
             // btnUuenda
             // 
-            btnUuenda.Location = new Point(393, 164);
+            btnUuenda.Location = new Point(382, 168);
             btnUuenda.Name = "btnUuenda";
             btnUuenda.Size = new Size(150, 30);
             btnUuenda.TabIndex = 8;
             btnUuenda.Text = "Uuenda";
+            btnUuenda.Click += btnUuenda_Click;
             // 
             // btnKustuta
             // 
-            btnKustuta.Location = new Point(590, 168);
+            btnKustuta.Location = new Point(565, 168);
             btnKustuta.Name = "btnKustuta";
             btnKustuta.Size = new Size(150, 30);
             btnKustuta.TabIndex = 9;
             btnKustuta.Text = "Kustuta";
+            btnKustuta.Click += btnKustuta_Click;
             // 
             // btnValiPilt
             // 
-            btnValiPilt.Location = new Point(0, 164);
+            btnValiPilt.Location = new Point(12, 168);
             btnValiPilt.Name = "btnValiPilt";
             btnValiPilt.Size = new Size(150, 30);
             btnValiPilt.TabIndex = 6;

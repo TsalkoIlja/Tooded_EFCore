@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,7 +15,8 @@ namespace Tooded_EFCore
         public Form2()
         {
             InitializeComponent();
-
+            dataGridViewTooted.AllowUserToAddRows = false;
+            dataGridViewTooted.CellClick += dataGridViewTooted_CellClick;
             _db = new ToodedContext();
 
             LaeKategooriad();
@@ -49,6 +49,38 @@ namespace Tooded_EFCore
                     t.Pilt
                 })
                 .ToList();
+        }
+        private void dataGridViewTooted_CellClick(
+            object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            int id = Convert.ToInt32(
+                dataGridViewTooted.Rows[e.RowIndex].Cells["Id"].Value);
+
+            var toode = _db.Toodetabel.Find(id);
+
+            if (toode == null)
+                return;
+
+            txtNimetus.Text = toode.Toodenimetus;
+            txtKogus.Text = toode.Kogus.ToString();
+            txtHind.Text = toode.Hind.ToString();
+            comboKategooria.SelectedValue = toode.KategooriaId;
+
+            valitudPilt = null;
+
+            picturePilt.Image?.Dispose();
+            picturePilt.Image = null;
+
+            string tee = Path.Combine("Images", toode.Pilt ?? "");
+
+            if (File.Exists(tee))
+            {
+                using var pilt = Image.FromFile(tee);
+                picturePilt.Image = new Bitmap(pilt);
+            }
         }
 
         private void txtKogus_TextChanged(object sender, EventArgs e)
@@ -115,6 +147,108 @@ namespace Tooded_EFCore
 
             MessageBox.Show("Toode on lisatud!");
         }
+
+        private void btnUuenda_Click(object? sender, EventArgs e)
+        {
+            if (dataGridViewTooted.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vali kõigepealt toode!");
+                return;
+            }
+
+            int id = Convert.ToInt32(
+                dataGridViewTooted.SelectedRows[0].Cells["Id"].Value);
+
+            var toode = _db.Toodetabel.Find(id);
+
+            if (toode == null)
+            {
+                MessageBox.Show("Toodet ei leitud!");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtNimetus.Text) ||
+                !int.TryParse(txtKogus.Text, out int kogus) ||
+                kogus < 0 ||
+                !float.TryParse(txtHind.Text, out float hind) ||
+                hind < 0 ||
+                comboKategooria.SelectedValue is not int kategooriaId)
+            {
+                MessageBox.Show("Kontrolli toote andmeid!");
+                return;
+            }
+
+            toode.Toodenimetus = txtNimetus.Text;
+            toode.Kogus = kogus;
+            toode.Hind = hind;
+            toode.KategooriaId = kategooriaId;
+
+            if (!string.IsNullOrEmpty(valitudPilt))
+            {
+                Directory.CreateDirectory("Images");
+
+                string pildiNimi = Guid.NewGuid().ToString()
+                                   + Path.GetExtension(valitudPilt);
+
+                File.Copy(valitudPilt,
+                    Path.Combine("Images", pildiNimi), true);
+
+                toode.Pilt = pildiNimi;
+            }
+
+            _db.SaveChanges();
+            LaeTooted();
+
+            valitudPilt = null;
+
+            MessageBox.Show("Toode on uuendatud!");
+        }
+
+        private void btnKustuta_Click(object? sender, EventArgs e)
+        {
+            if (dataGridViewTooted.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vali kõigepealt toode!");
+                return;
+            }
+
+            int id = Convert.ToInt32(
+                dataGridViewTooted.SelectedRows[0].Cells["Id"].Value);
+
+            var toode = _db.Toodetabel.Find(id);
+
+            if (toode == null)
+            {
+                MessageBox.Show("Toodet ei leitud!");
+                return;
+            }
+
+            DialogResult vastus = MessageBox.Show(
+                "Kas soovid selle toote kustutada?",
+                "Kustutamine",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (vastus != DialogResult.Yes)
+                return;
+
+            _db.Toodetabel.Remove(toode);
+            _db.SaveChanges();
+
+            LaeTooted();
+
+            txtNimetus.Clear();
+            txtKogus.Clear();
+            txtHind.Clear();
+
+            picturePilt.Image?.Dispose();
+            picturePilt.Image = null;
+
+            valitudPilt = null;
+
+            MessageBox.Show("Toode on kustutatud!");
+        }
+
 
     }
 }

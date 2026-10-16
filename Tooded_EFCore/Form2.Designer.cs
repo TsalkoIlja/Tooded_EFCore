@@ -50,6 +50,7 @@
             btnUuenda = new Button();
             btnKustuta = new Button();
             btnValiPilt = new Button();
+            btnArve = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewTooted).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picturePilt).BeginInit();
             SuspendLayout();
@@ -71,7 +72,7 @@
             txtNimetus.Location = new Point(0, -1);
             txtNimetus.Name = "txtNimetus";
             txtNimetus.PlaceholderText = "Toote nimetus";
-            txtNimetus.Size = new Size(200, 27);
+            txtNimetus.Size = new Size(200, 23);
             txtNimetus.TabIndex = 1;
             txtNimetus.TextChanged += txtNimetus_TextChanged;
             // 
@@ -80,7 +81,7 @@
             txtKogus.Location = new Point(0, 32);
             txtKogus.Name = "txtKogus";
             txtKogus.PlaceholderText = "Kogus";
-            txtKogus.Size = new Size(200, 27);
+            txtKogus.Size = new Size(200, 23);
             txtKogus.TabIndex = 2;
             txtKogus.TextChanged += txtKogus_TextChanged;
             // 
@@ -89,7 +90,7 @@
             txtHind.Location = new Point(0, 65);
             txtHind.Name = "txtHind";
             txtHind.PlaceholderText = "Hind €";
-            txtHind.Size = new Size(200, 27);
+            txtHind.Size = new Size(200, 23);
             txtHind.TabIndex = 3;
             // 
             // comboKategooria
@@ -97,7 +98,7 @@
             comboKategooria.DropDownStyle = ComboBoxStyle.DropDownList;
             comboKategooria.Location = new Point(0, 98);
             comboKategooria.Name = "comboKategooria";
-            comboKategooria.Size = new Size(200, 28);
+            comboKategooria.Size = new Size(200, 23);
             comboKategooria.TabIndex = 4;
             // 
             // picturePilt
@@ -146,9 +147,20 @@
             btnValiPilt.Text = "Vali pilt";
             btnValiPilt.Click += btnValiPilt_Click;
             // 
+            // btnArve
+            // 
+            btnArve.Location = new Point(732, 168);
+            btnArve.Name = "btnArve";
+            btnArve.Size = new Size(116, 33);
+            btnArve.TabIndex = 10;
+            btnArve.Text = "Lisa arvele";
+            btnArve.UseVisualStyleBackColor = true;
+            btnArve.Click += btnArve_Click;
+            // 
             // Form2
             // 
             ClientSize = new Size(860, 520);
+            Controls.Add(btnArve);
             Controls.Add(dataGridViewTooted);
             Controls.Add(txtNimetus);
             Controls.Add(txtKogus);
@@ -170,5 +182,7 @@
 
 
         #endregion
+
+        private Button btnArve;
     }
 }

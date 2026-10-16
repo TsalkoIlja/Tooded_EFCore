@@ -253,6 +253,31 @@ namespace Tooded_EFCore
         {
 
         }
+
+        private void btnArve_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewTooted.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vali kõigepealt toode!");
+                return;
+            }
+
+            int id = Convert.ToInt32(
+                dataGridViewTooted.SelectedRows[0].Cells["Id"].Value);
+
+            var toode = _db.Toodetabel.Find(id);
+
+            if (toode == null)
+            {
+                MessageBox.Show("Toodet ei leitud!");
+                return;
+            }
+
+            ArveForm arve = new ArveForm();
+            arve.SelectedToode = toode;
+            arve.ShowDialog();
+        }
+
     }
 }
 

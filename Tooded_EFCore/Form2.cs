@@ -31,7 +31,6 @@ namespace Tooded_EFCore
             LaeTooted();
         }
 
-
         private void LaeKategooriad()
         {
             comboKategooria.DataSource =
@@ -59,6 +58,7 @@ namespace Tooded_EFCore
                 })
                 .ToList();
         }
+
         private void dataGridViewTooted_CellClick(
             object? sender, DataGridViewCellEventArgs e)
         {
@@ -83,7 +83,9 @@ namespace Tooded_EFCore
             picturePilt.Image?.Dispose();
             picturePilt.Image = null;
 
-            string tee = Path.Combine("Images", toode.Pilt ?? "");
+            string tee = Path.Combine(
+                Kaustad.Pildid,
+                toode.Pilt ?? "");
 
             if (File.Exists(tee))
             {
@@ -96,6 +98,7 @@ namespace Tooded_EFCore
         {
 
         }
+
         private void btnValiPilt_Click(object sender, EventArgs e)
         {
             using OpenFileDialog ofd = new OpenFileDialog();
@@ -107,7 +110,9 @@ namespace Tooded_EFCore
                 valitudPilt = ofd.FileName;
 
                 picturePilt.Image?.Dispose();
-                picturePilt.Image = Image.FromFile(valitudPilt);
+
+                using var pilt = Image.FromFile(valitudPilt);
+                picturePilt.Image = new Bitmap(pilt);
             }
         }
 
@@ -120,7 +125,8 @@ namespace Tooded_EFCore
                 hind < 0 ||
                 comboKategooria.SelectedValue is not int kategooriaId)
             {
-                MessageBox.Show("Kontrolli toote andmeid ja kategooriat!");
+                MessageBox.Show(
+                    "Kontrolli toote andmeid ja kategooriat!");
                 return;
             }
 
@@ -128,14 +134,14 @@ namespace Tooded_EFCore
 
             if (!string.IsNullOrEmpty(valitudPilt))
             {
-                Directory.CreateDirectory("Images");
+                Directory.CreateDirectory(Kaustad.Pildid);
 
                 pildiNimi = Guid.NewGuid().ToString() +
                             Path.GetExtension(valitudPilt);
 
                 File.Copy(
                     valitudPilt,
-                    Path.Combine("Images", pildiNimi),
+                    Path.Combine(Kaustad.Pildid, pildiNimi),
                     true
                 );
             }
@@ -194,13 +200,16 @@ namespace Tooded_EFCore
 
             if (!string.IsNullOrEmpty(valitudPilt))
             {
-                Directory.CreateDirectory("Images");
+                Directory.CreateDirectory(Kaustad.Pildid);
 
-                string pildiNimi = Guid.NewGuid().ToString()
-                                   + Path.GetExtension(valitudPilt);
+                string pildiNimi = Guid.NewGuid().ToString() +
+                                   Path.GetExtension(valitudPilt);
 
-                File.Copy(valitudPilt,
-                    Path.Combine("Images", pildiNimi), true);
+                File.Copy(
+                    valitudPilt,
+                    Path.Combine(Kaustad.Pildid, pildiNimi),
+                    true
+                );
 
                 toode.Pilt = pildiNimi;
             }
@@ -282,11 +291,11 @@ namespace Tooded_EFCore
                 return;
             }
 
-            ArveForm arve = new ArveForm();
+            using ArveForm arve = new ArveForm();
             arve.SelectedToode = toode;
             arve.ShowDialog();
         }
-
     }
 }
+
 

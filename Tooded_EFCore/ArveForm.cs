@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
@@ -125,10 +124,10 @@ namespace Tooded_EFCore
 
             try
             {
-                Directory.CreateDirectory("Arved");
+                Directory.CreateDirectory(Kaustad.Arved);
 
                 string failiTee = Path.Combine(
-                    "Arved",
+                    Kaustad.Arved,
                     $"Arve_{DateTime.Now:yyyyMMdd_HHmmss_fff}.pdf"
                 );
 
@@ -175,7 +174,6 @@ namespace Tooded_EFCore
 
                 foreach (var rida in Ostukorv.Ridad)
                 {
-                    // Uus lehekülg, kui ruum saab otsa
                     if (y > leht.Height.Point - 90)
                     {
                         MessageBox.Show(
@@ -303,6 +301,8 @@ namespace Tooded_EFCore
         }
     }
 }
+
+
 
 
 

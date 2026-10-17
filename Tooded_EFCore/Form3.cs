@@ -49,7 +49,8 @@ namespace Tooded_EFCore
                     pb.Location = new Point(5, 5);
 
                     string piltPath = Path.Combine(
-                        "Images", t.Pilt ?? "puudub.png");
+                        Kaustad.Pildid,
+                        t.Pilt ?? "puudub.png");
 
                     if (File.Exists(piltPath))
                     {
@@ -57,18 +58,14 @@ namespace Tooded_EFCore
                         pb.Image = new Bitmap(pilt);
                     }
 
-                    // Nimetus ja hind
                     Label lbl = new Label();
-                    lbl.Text =
-                        $"{t.Toodenimetus}\n{t.Hind:F2} EUR";
-
+                    lbl.Text = $"{t.Toodenimetus}\n{t.Hind:F2} EUR";
                     lbl.AutoSize = false;
                     lbl.TextAlign = ContentAlignment.MiddleCenter;
                     lbl.Location = new Point(5, 150);
                     lbl.Width = 150;
                     lbl.Height = 40;
 
-                    // Koguse valimine
                     NumericUpDown numKogus = new NumericUpDown();
                     numKogus.Location = new Point(5, 195);
                     numKogus.Width = 150;
@@ -77,7 +74,6 @@ namespace Tooded_EFCore
                     numKogus.Value = 1;
                     numKogus.Enabled = t.Kogus > 0;
 
-                    // Lisa korvi nupp
                     Button btnLisaKorvi = new Button();
                     btnLisaKorvi.Text = "Lisa korvi";
                     btnLisaKorvi.Location = new Point(5, 228);
@@ -100,7 +96,6 @@ namespace Tooded_EFCore
                             "Ostukorv");
                     };
 
-                    // Toote info pildile klikkides
                     pb.Click += (s, e) =>
                     {
                         MessageBox.Show(
@@ -110,18 +105,15 @@ namespace Tooded_EFCore
                             "Toote info");
                     };
 
-                    // Lisa elemendid paneelile
                     p.Controls.Add(pb);
                     p.Controls.Add(lbl);
                     p.Controls.Add(numKogus);
                     p.Controls.Add(btnLisaKorvi);
 
-                    // Paiguta tooted
                     int x = 10 + (count % 4) * 180;
                     int y = 10 + (count / 4) * 280;
 
                     p.Location = new Point(x, y);
-
                     page.Controls.Add(p);
 
                     count++;

@@ -14,14 +14,23 @@ namespace Tooded_EFCore
 
         public Form2()
         {
+            if (AktiivneKasutaja.Roll != "admin")
+            {
+                throw new UnauthorizedAccessException(
+                    "Ainult administraator saab tooteid hallata!");
+            }
+
             InitializeComponent();
+
             dataGridViewTooted.AllowUserToAddRows = false;
             dataGridViewTooted.CellClick += dataGridViewTooted_CellClick;
+
             _db = new ToodedContext();
 
             LaeKategooriad();
             LaeTooted();
         }
+
 
         private void LaeKategooriad()
         {

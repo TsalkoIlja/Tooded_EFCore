@@ -11,7 +11,7 @@ namespace Tooded_EFCore
             InitializeComponent();
 
             Text = "Peamen¸¸";
-            Size = new Size(400, 350);
+            Size = new Size(400, 420);
             StartPosition = FormStartPosition.CenterScreen;
 
             // Toodete haldus
@@ -19,12 +19,21 @@ namespace Tooded_EFCore
             btnHaldus.Text = "Toodete haldus";
             btnHaldus.Size = new Size(200, 50);
             btnHaldus.Location = new Point(90, 60);
+            btnHaldus.Enabled = AktiivneKasutaja.Roll == "admin";
+
 
             btnHaldus.Click += (s, e) =>
             {
+                if (AktiivneKasutaja.Roll != "admin")
+                {
+                    MessageBox.Show("Ligip‰‰s keelatud!");
+                    return;
+                }
+
                 using Form2 haldus = new Form2();
                 haldus.ShowDialog();
             };
+
 
             // Pood
             Button btnPood = new Button();
@@ -53,6 +62,33 @@ namespace Tooded_EFCore
             Controls.Add(btnHaldus);
             Controls.Add(btnPood);
             Controls.Add(btnArve);
+
+
+            Button btnLisaKasutaja = new Button();
+
+            btnLisaKasutaja.Text = "Lisa kasutaja";
+            btnLisaKasutaja.Size = new Size(200, 50);
+            btnLisaKasutaja.Location = new Point(90, 270);
+
+            btnLisaKasutaja.Visible =
+                AktiivneKasutaja.Roll == "admin";
+
+            btnLisaKasutaja.Click += (sender, e) =>
+            {
+                if (AktiivneKasutaja.Roll != "admin")
+                {
+                    MessageBox.Show("Ligip‰‰s keelatud!");
+                    return;
+                }
+
+                using (LisaKasutajaForm vorm = new LisaKasutajaForm())
+                {
+                    vorm.ShowDialog();
+                }
+            };
+
+            Controls.Add(btnLisaKasutaja);
+
         }
     }
 }

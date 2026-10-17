@@ -9,7 +9,7 @@ namespace Tooded_EFCore
     {
         public DbSet<Toode> Toodetabel { get; set; }
         public DbSet<Kategooria> Kategooriatabel { get; set; }
-
+        public DbSet<Kasutaja> Kasutajad { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
@@ -20,6 +20,7 @@ namespace Tooded_EFCore
         {
             modelBuilder.Entity<Kategooria>().ToTable("Kategooriatabel");
             modelBuilder.Entity<Toode>().ToTable("Toodetabel");
+
         }
     }
 }

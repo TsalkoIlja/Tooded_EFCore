@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Tooded_EFCore
 {
@@ -53,9 +54,54 @@ namespace Tooded_EFCore
                 page.BackColor =
                     Color.FromArgb(245, 247, 250);
 
+                // Sorteerimise pealkiri
+                Label lblSorteeri = new Label();
+
+                lblSorteeri.Text = "Sorteeri hinna järgi:";
+                lblSorteeri.Location = new Point(10, 15);
+                lblSorteeri.Size = new Size(150, 25);
+
+                lblSorteeri.Font = new Font(
+                    "Segoe UI", 9F, FontStyle.Bold);
+
+                lblSorteeri.ForeColor =
+                    Color.FromArgb(40, 40, 40);
+
+                // Sorteerimise valik
+                ComboBox comboSorteeri = new ComboBox();
+
+                comboSorteeri.Location = new Point(165, 10);
+                comboSorteeri.Size = new Size(220, 30);
+
+                comboSorteeri.DropDownStyle =
+                    ComboBoxStyle.DropDownList;
+
+                comboSorteeri.FlatStyle = FlatStyle.Flat;
+
+                comboSorteeri.Font = new Font(
+                    "Segoe UI", 9F);
+
+                comboSorteeri.BackColor = Color.White;
+
+                comboSorteeri.ForeColor =
+                    Color.FromArgb(40, 40, 40);
+
+                comboSorteeri.Items.Add("Vaikimisi");
+                comboSorteeri.Items.Add("Hind: odavam enne");
+                comboSorteeri.Items.Add("Hind: kallim enne");
+
+                comboSorteeri.SelectedIndex = 0;
+
+                page.Controls.Add(lblSorteeri);
+                page.Controls.Add(comboSorteeri);
+
                 var tooted = _db.Toodetabel
                     .Where(t => t.KategooriaId == kat.Id)
                     .ToList();
+
+                // Tootekaardid ja nende hinnad
+                var kaardid =
+                    new List<(Panel Kaart, double Hind)>();
 
                 int count = 0;
 
@@ -213,15 +259,52 @@ namespace Tooded_EFCore
                     p.Controls.Add(numKogus);
                     p.Controls.Add(btnLisaKorvi);
 
-                    // Toodete asukohad jäävad samaks
+                    // Tootekaardid sorteeri valiku all
                     int x = 10 + (count % 4) * 180;
-                    int y = 10 + (count / 4) * 280;
+                    int y = 55 + (count / 4) * 280;
 
                     p.Location = new Point(x, y);
                     page.Controls.Add(p);
 
+                    // Salvestame kaardi ja hinna
+                    kaardid.Add((
+                        p,
+                        Convert.ToDouble(t.Hind)
+                    ));
+
                     count++;
                 }
+
+                // Toodete sorteerimine hinna järgi
+                comboSorteeri.SelectedIndexChanged += (s, e) =>
+                {
+                    var sorteeritudKaardid =
+                        comboSorteeri.SelectedIndex switch
+                        {
+                            1 => kaardid
+                                .OrderBy(k => k.Hind)
+                                .ToList(),
+
+                            2 => kaardid
+                                .OrderByDescending(k => k.Hind)
+                                .ToList(),
+
+                            _ => kaardid.ToList()
+                        };
+
+                    int index = 0;
+
+                    foreach (var kaart in sorteeritudKaardid)
+                    {
+                        int x = 10 + (index % 4) * 180;
+                        int y = 55 + (index / 4) * 280;
+
+                        kaart.Kaart.Location =
+                            new Point(x, y);
+
+                        index++;
+                    }
+                };
 
                 tabPood.TabPages.Add(page);
             }

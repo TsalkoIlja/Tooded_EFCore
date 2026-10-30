@@ -24,7 +24,7 @@ namespace Tooded_EFCore
         {
             InitializeComponent();
 
-            Text = "Ostukorv ja arve";
+            Text = "Tooded App - Ostukorv ja arve";
 
             lblKokku.AutoSize = true;
             lblKokku.Font = new Font(
@@ -54,7 +54,68 @@ namespace Tooded_EFCore
                 Math.Max(ClientSize.Height, btnEemalda.Bottom + 20)
             );
 
+            // Värvide kujundamine
+            KujundaVarvid();
+
             Shown += (s, e) => NaitaKorvi();
+        }
+
+        // Vormi ja nuppude värvid
+        private void KujundaVarvid()
+        {
+            // Vormi taust
+            BackColor = Color.FromArgb(245, 247, 250);
+
+            // Ostukorvi nimekiri
+            listOstukorv.BackColor = Color.White;
+            listOstukorv.ForeColor =
+                Color.FromArgb(40, 40, 40);
+
+            listOstukorv.BorderStyle =
+                BorderStyle.FixedSingle;
+
+            // Kogusumma
+            lblKokku.ForeColor =
+                Color.FromArgb(37, 99, 235);
+
+            // Kõik olemasolevad nupud
+            foreach (Control element in Controls)
+            {
+                if (element is Button nupp)
+                {
+                    // Säilitame nuppude asukohad ja suurused
+                    nupp.FlatStyle = FlatStyle.Flat;
+                    nupp.FlatAppearance.BorderSize = 0;
+                    nupp.ForeColor = Color.White;
+                    nupp.Cursor = Cursors.Hand;
+
+                    // Vaikimisi sinine nupp
+                    nupp.BackColor =
+                        Color.FromArgb(52, 152, 219);
+
+                    nupp.FlatAppearance.MouseOverBackColor =
+                        Color.FromArgb(37, 99, 235);
+
+                    // PDF-i saatmise nupp on roheline
+                    if (nupp.Text.Contains(
+                        "Saada",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        nupp.BackColor =
+                            Color.FromArgb(34, 139, 94);
+
+                        nupp.FlatAppearance.MouseOverBackColor =
+                            Color.FromArgb(25, 110, 73);
+                    }
+                }
+            }
+
+            // Eemaldamise nupp on punane
+            btnEemalda.BackColor =
+                Color.FromArgb(220, 53, 69);
+
+            btnEemalda.FlatAppearance.MouseOverBackColor =
+                Color.FromArgb(185, 35, 50);
         }
 
         private void NaitaKorvi()
@@ -301,6 +362,7 @@ namespace Tooded_EFCore
         }
     }
 }
+
 
 
 

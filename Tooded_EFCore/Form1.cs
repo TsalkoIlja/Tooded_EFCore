@@ -10,36 +10,70 @@ namespace Tooded_EFCore
         {
             InitializeComponent();
 
-            Text = "Peamen¸¸";
-            Size = new Size(400, 420);
-            StartPosition = FormStartPosition.CenterScreen;
+            UiHelper.StyleForm(this);
 
-            // Toodete haldus
-            Button btnHaldus = new Button();
-            btnHaldus.Text = "Toodete haldus";
-            btnHaldus.Size = new Size(200, 50);
-            btnHaldus.Location = new Point(90, 60);
-            btnHaldus.Enabled = AktiivneKasutaja.Roll == "admin";
+            bool isAdmin = AktiivneKasutaja.Roll == "admin";
 
+            Text = "Tooded App - Peamen¸¸";
+            ClientSize = new Size(440, isAdmin ? 490 : 330);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
 
-            btnHaldus.Click += (s, e) =>
+            // Pealkiri
+            Label lblPealkiri = new Label();
+            lblPealkiri.Text = "TOODED APP";
+            lblPealkiri.Font = new Font(
+                "Segoe UI", 22, FontStyle.Bold);
+            lblPealkiri.ForeColor = UiHelper.MainColor;
+            lblPealkiri.TextAlign = ContentAlignment.MiddleCenter;
+            lblPealkiri.SetBounds(40, 25, 360, 50);
+
+            Controls.Add(lblPealkiri);
+
+            // Alapealkiri
+            Label lblInfo = new Label();
+            lblInfo.Text = "Peamen¸¸";
+            lblInfo.Font = new Font("Segoe UI", 11);
+            lblInfo.ForeColor = UiHelper.TextColor;
+            lblInfo.TextAlign = ContentAlignment.MiddleCenter;
+            lblInfo.SetBounds(40, 75, 360, 30);
+
+            Controls.Add(lblInfo);
+
+            // Toodete haldus - ainult admin
+            if (isAdmin)
             {
-                if (AktiivneKasutaja.Roll != "admin")
+                Button btnHaldus = new Button();
+                btnHaldus.Text = "Toodete haldus";
+                UiHelper.StyleButton(btnHaldus);
+                btnHaldus.SetBounds(90, 125, 260, 55);
+
+                btnHaldus.Click += (s, e) =>
                 {
-                    MessageBox.Show("Ligip‰‰s keelatud!");
-                    return;
-                }
+                    if (AktiivneKasutaja.Roll != "admin")
+                    {
+                        MessageBox.Show("Ligip‰‰s keelatud!");
+                        return;
+                    }
 
-                using Form2 haldus = new Form2();
-                haldus.ShowDialog();
-            };
+                    using Form2 haldus = new Form2();
+                    haldus.ShowDialog();
+                };
 
+                Controls.Add(btnHaldus);
+            }
 
             // Pood
             Button btnPood = new Button();
             btnPood.Text = "Pood";
-            btnPood.Size = new Size(200, 50);
-            btnPood.Location = new Point(90, 130);
+            UiHelper.StyleButton(btnPood);
+
+            btnPood.SetBounds(
+                90,
+                isAdmin ? 195 : 125,
+                260,
+                55
+            );
 
             btnPood.Click += (s, e) =>
             {
@@ -47,11 +81,19 @@ namespace Tooded_EFCore
                 pood.ShowDialog();
             };
 
+            Controls.Add(btnPood);
+
             // Ostukorv ja arve
             Button btnArve = new Button();
             btnArve.Text = "Ostukorv ja arve";
-            btnArve.Size = new Size(200, 50);
-            btnArve.Location = new Point(90, 200);
+            UiHelper.StyleButton(btnArve);
+
+            btnArve.SetBounds(
+                90,
+                isAdmin ? 265 : 195,
+                260,
+                55
+            );
 
             btnArve.Click += (s, e) =>
             {
@@ -59,38 +101,53 @@ namespace Tooded_EFCore
                 arve.ShowDialog();
             };
 
-            Controls.Add(btnHaldus);
-            Controls.Add(btnPood);
             Controls.Add(btnArve);
 
-
-            Button btnLisaKasutaja = new Button();
-
-            btnLisaKasutaja.Text = "Lisa kasutaja";
-            btnLisaKasutaja.Size = new Size(200, 50);
-            btnLisaKasutaja.Location = new Point(90, 270);
-
-            btnLisaKasutaja.Visible =
-                AktiivneKasutaja.Roll == "admin";
-
-            btnLisaKasutaja.Click += (sender, e) =>
+            // Lisa kasutaja - ainult admin
+            if (isAdmin)
             {
-                if (AktiivneKasutaja.Roll != "admin")
-                {
-                    MessageBox.Show("Ligip‰‰s keelatud!");
-                    return;
-                }
+                Button btnLisaKasutaja = new Button();
+                btnLisaKasutaja.Text = "Lisa kasutaja";
+                UiHelper.StyleButton(btnLisaKasutaja);
+                btnLisaKasutaja.SetBounds(90, 335, 260, 55);
 
-                using (LisaKasutajaForm vorm = new LisaKasutajaForm())
+                btnLisaKasutaja.Click += (sender, e) =>
                 {
+                    if (AktiivneKasutaja.Roll != "admin")
+                    {
+                        MessageBox.Show("Ligip‰‰s keelatud!");
+                        return;
+                    }
+
+                    using LisaKasutajaForm vorm =
+                        new LisaKasutajaForm();
+
                     vorm.ShowDialog();
-                }
-            };
+                };
 
-            Controls.Add(btnLisaKasutaja);
+                Controls.Add(btnLisaKasutaja);
+            }
 
+            // Alumine tekst
+            Label lblAlumine = new Label();
+            lblAlumine.Text = "Toodete haldamise rakendus";
+            lblAlumine.Font = new Font("Segoe UI", 9);
+            lblAlumine.ForeColor = Color.Gray;
+            lblAlumine.TextAlign =
+                ContentAlignment.MiddleCenter;
+
+            lblAlumine.SetBounds(
+                40,
+                isAdmin ? 435 : 280,
+                360,
+                25
+            );
+
+            Controls.Add(lblAlumine);
         }
     }
 }
+
+
 
 

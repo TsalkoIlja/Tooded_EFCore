@@ -22,6 +22,9 @@ namespace Tooded_EFCore
 
             InitializeComponent();
 
+            // Värvide kujundamine
+            KujundaVarvid();
+
             dataGridViewTooted.AllowUserToAddRows = false;
             dataGridViewTooted.CellClick += dataGridViewTooted_CellClick;
 
@@ -29,6 +32,55 @@ namespace Tooded_EFCore
 
             LaeKategooriad();
             LaeTooted();
+        }
+
+        // Vormi värvid
+        private void KujundaVarvid()
+        {
+            BackColor = Color.FromArgb(245, 247, 250);
+
+            // Tabeli kujundus
+            dataGridViewTooted.BackgroundColor = Color.White;
+            dataGridViewTooted.EnableHeadersVisualStyles = false;
+
+            dataGridViewTooted.ColumnHeadersDefaultCellStyle.BackColor =
+                Color.FromArgb(52, 152, 219);
+
+            dataGridViewTooted.ColumnHeadersDefaultCellStyle.ForeColor =
+                Color.White;
+
+            dataGridViewTooted.ColumnHeadersDefaultCellStyle.Font =
+                new Font("Segoe UI", 10, FontStyle.Bold);
+
+            dataGridViewTooted.DefaultCellStyle.SelectionBackColor =
+                Color.FromArgb(190, 220, 245);
+
+            dataGridViewTooted.DefaultCellStyle.SelectionForeColor =
+                Color.Black;
+
+            dataGridViewTooted.AlternatingRowsDefaultCellStyle.BackColor =
+                Color.FromArgb(245, 249, 253);
+
+            // Nuppude värvid
+            VarviNupp(btnLisa, Color.FromArgb(52, 152, 219));
+            VarviNupp(btnUuenda, Color.FromArgb(37, 99, 235));
+            VarviNupp(btnKustuta, Color.FromArgb(220, 53, 69));
+            VarviNupp(btnValiPilt, Color.FromArgb(100, 116, 139));
+            VarviNupp(btnArve, Color.FromArgb(34, 139, 94));
+
+            // Pildi taust
+            picturePilt.BackColor = Color.White;
+        }
+
+        // Nupu värvi muutmine
+        private void VarviNupp(Button nupp, Color varv)
+        {
+            nupp.FlatStyle = FlatStyle.Flat;
+            nupp.FlatAppearance.BorderSize = 0;
+            nupp.BackColor = varv;
+            nupp.ForeColor = Color.White;
+            nupp.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            nupp.Cursor = Cursors.Hand;
         }
 
         private void LaeKategooriad()
@@ -297,5 +349,6 @@ namespace Tooded_EFCore
         }
     }
 }
+
 
 

@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Mail;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Drawing;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tooded_EFCore
 {
@@ -13,6 +14,9 @@ namespace Tooded_EFCore
     {
         private Label lblKokku = new Label();
         private Button btnEemalda = new Button();
+
+        // Uus nupp ostu kinnitamiseks
+        private Button btnKinnitaOst = new Button();
 
         private string? viimanePdf;
 
@@ -49,9 +53,27 @@ namespace Tooded_EFCore
             Controls.Add(lblKokku);
             Controls.Add(btnEemalda);
 
+            // Uus nupp - kinnita ost
+            btnKinnitaOst.Text = "Kinnita ost";
+
+            btnKinnitaOst.Size = new Size(
+                Math.Max(150, listOstukorv.Width), 35);
+
+            btnKinnitaOst.Location = new Point(
+                listOstukorv.Left,
+                btnEemalda.Bottom + 10
+            );
+
+            btnKinnitaOst.Click += btnKinnitaOst_Click;
+
+            Controls.Add(btnKinnitaOst);
+
+            // Vormi kõrgus uue nupu jaoks
             ClientSize = new Size(
                 ClientSize.Width,
-                Math.Max(ClientSize.Height, btnEemalda.Bottom + 20)
+                Math.Max(
+                    ClientSize.Height,
+                    btnKinnitaOst.Bottom + 20)
             );
 
             // Värvide kujundamine
@@ -63,11 +85,11 @@ namespace Tooded_EFCore
         // Vormi ja nuppude värvid
         private void KujundaVarvid()
         {
-            // Vormi taust
             BackColor = Color.FromArgb(245, 247, 250);
 
             // Ostukorvi nimekiri
             listOstukorv.BackColor = Color.White;
+
             listOstukorv.ForeColor =
                 Color.FromArgb(40, 40, 40);
 
@@ -83,13 +105,11 @@ namespace Tooded_EFCore
             {
                 if (element is Button nupp)
                 {
-                    // Säilitame nuppude asukohad ja suurused
                     nupp.FlatStyle = FlatStyle.Flat;
                     nupp.FlatAppearance.BorderSize = 0;
                     nupp.ForeColor = Color.White;
                     nupp.Cursor = Cursors.Hand;
 
-                    // Vaikimisi sinine nupp
                     nupp.BackColor =
                         Color.FromArgb(52, 152, 219);
 
@@ -116,6 +136,16 @@ namespace Tooded_EFCore
 
             btnEemalda.FlatAppearance.MouseOverBackColor =
                 Color.FromArgb(185, 35, 50);
+
+            // Ostu kinnitamise nupp on roheline
+            btnKinnitaOst.BackColor =
+                Color.FromArgb(34, 139, 94);
+
+            btnKinnitaOst.FlatAppearance.MouseOverBackColor =
+                Color.FromArgb(25, 110, 73);
+
+            btnKinnitaOst.Font = new Font(
+                "Segoe UI", 10F, FontStyle.Bold);
         }
 
         private void NaitaKorvi()
@@ -170,10 +200,133 @@ namespace Tooded_EFCore
             }
         }
 
+        
+        // 6. EDASIARENDUS
+        // AUTOMAATNE LAOSEISU VÄHENDAMINE
+     
+
+        private void btnKinnitaOst_Click(object? sender, EventArgs e)
+        {
+            // Kontrollime, kas ostukorvis on tooteid
+            if (Ostukorv.Ridad.Count == 0)
+            {
+                MessageBox.Show(
+                    "Ostukorv on tühi!",
+                    "Ostu kinnitamine");
+
+                return;
+            }
+
+            // Küsime kasutajalt kinnitust
+            DialogResult vastus = MessageBox.Show(
+                $"Kas soovid ostu kinnitada?\n\n" +
+                $"Kokku: {Ostukorv.Kokku:F2} EUR\n\n" +
+                "Pärast kinnitamist vähendatakse toodete laoseisu.",
+                "Kinnita ost",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (vastus != DialogResult.Yes)
+                return;
+
+            try
+            {
+                using var db = new ToodedContext();
+
+                // Kõik muudatused tehakse ühe tehinguna
+                using var tehing =
+                    db.Database.BeginTransaction();
+
+                foreach (var rida in Ostukorv.Ridad)
+                {
+                    int tooteId = rida.Toode.Id;
+                    int ostetavKogus = rida.Kogus;
+
+                    if (ostetavKogus <= 0)
+                    {
+                        tehing.Rollback();
+
+                        MessageBox.Show(
+                            "Vigane toote kogus!",
+                            "Ostu viga");
+
+                        return;
+                    }
+
+                    // Vähendame laoseisu ainult siis,
+                    // kui toodet on piisavalt.
+                    int muudetud = db.Toodetabel
+                        .Where(t =>
+                            t.Id == tooteId &&
+                            t.Kogus >= ostetavKogus)
+                        .ExecuteUpdate(seaded =>
+                            seaded.SetProperty(
+                                t => t.Kogus,
+                                t => t.Kogus - ostetavKogus)
+                        );
+
+                    if (muudetud != 1)
+                    {
+                        // Kui ühest tootest ei piisa,
+                        // tühistame kõik muudatused.
+                        tehing.Rollback();
+
+                        MessageBox.Show(
+                            $"Toode \"{rida.Toode.Toodenimetus}\" " +
+                            "puudub või seda ei ole laos piisavalt!\n" +
+                            "Ostu ei kinnitatud.",
+                            "Laoseisu viga",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+
+                        return;
+                    }
+                }
+
+                // Kõik tooted on olemas -
+                // salvestame muudatused andmebaasi
+                tehing.Commit();
+
+                decimal summa = Ostukorv.Kokku;
+
+                // Tühjendame ostukorvi
+                Ostukorv.Tyhjenda();
+
+                NaitaKorvi();
+
+                // Jätame juba loodud PDF-i alles,
+                // et seda saaks e-postiga saata.
+                MessageBox.Show(
+                    $"Ost on edukalt kinnitatud!\n\n" +
+                    $"Tasumisele kuulus: {summa:F2} EUR\n\n" +
+                    "Toodete laoseis on uuendatud.",
+                    "Ost kinnitatud",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Ostu kinnitamisel tekkis viga:\n" +
+                    ex.Message,
+                    "Ostu viga",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
         private void listBox1_SelectedIndexChanged(
             object sender, EventArgs e)
         {
         }
+
+       
+        // PDF ARVE
+       
 
         private void btnGenPDF_Click(object sender, EventArgs e)
         {
@@ -277,6 +430,9 @@ namespace Tooded_EFCore
             }
         }
 
+        // GMAIL
+       
+
         private void btnSaadaEmail_Click(object sender, EventArgs e)
         {
             string? gmail =
@@ -362,6 +518,7 @@ namespace Tooded_EFCore
         }
     }
 }
+
 
 
 

@@ -132,9 +132,7 @@ namespace Tooded_EFCore
                 yleminePaneel.Margin = Padding.Empty;
                 yleminePaneel.BackColor = Color.White;
 
-                
                 // 1. SORTEERI HINNA JÄRGI
-               
 
                 Label lblSorteeri = new Label();
 
@@ -178,7 +176,6 @@ namespace Tooded_EFCore
                 comboSorteeri.SelectedIndex = 0;
 
                 // 2. OTSI TOODET
-                
 
                 Label lblOtsi = new Label();
 
@@ -211,9 +208,7 @@ namespace Tooded_EFCore
                 txtOtsi.BorderStyle =
                     BorderStyle.FixedSingle;
 
-                
                 // 3. AINULT LAOS OLEVAD TOOTED
-                
 
                 CheckBox chkLaos = new CheckBox();
 
@@ -234,9 +229,7 @@ namespace Tooded_EFCore
 
                 chkLaos.BackColor = Color.White;
 
-                
                 // 4. OSTUKORVI LOENDUR
-               
 
                 Label lblOstukorv = new Label();
 
@@ -256,9 +249,7 @@ namespace Tooded_EFCore
 
                 _korviLoendurid.Add(lblOstukorv);
 
-                
                 // 5. TÜHJENDA OSTUKORV
-                
 
                 Button btnTyhjenda = new Button();
 
@@ -294,6 +285,48 @@ namespace Tooded_EFCore
                     TyhjendaOstukorv();
                 };
 
+                // 6. AVA OSTUKORV JA ARVE
+
+                Button btnAvaOstukorv = new Button();
+
+                btnAvaOstukorv.Text =
+                    "Ostukorv ja arve";
+
+                btnAvaOstukorv.Location =
+                    new Point(410, 74);
+
+                btnAvaOstukorv.Size =
+                    new Size(190, 32);
+
+                btnAvaOstukorv.FlatStyle =
+                    FlatStyle.Flat;
+
+                btnAvaOstukorv.FlatAppearance.BorderSize = 0;
+
+                btnAvaOstukorv.BackColor =
+                    Color.FromArgb(37, 99, 235);
+
+                btnAvaOstukorv.ForeColor = Color.White;
+
+                btnAvaOstukorv.Font = new Font(
+                    "Segoe UI", 9F, FontStyle.Bold);
+
+                btnAvaOstukorv.Cursor = Cursors.Hand;
+
+                btnAvaOstukorv.FlatAppearance.MouseOverBackColor =
+                    Color.FromArgb(29, 78, 216);
+
+                btnAvaOstukorv.Click += (s, e) =>
+                {
+                    using (ArveForm arveForm = new ArveForm())
+                    {
+                        arveForm.ShowDialog(this);
+                    }
+
+                    // Uuendame ostukorvi loendurit pärast vormi sulgemist
+                    UuendaKorviLoendurid();
+                };
+
                 // Ülemise paneeli elemendid
                 yleminePaneel.Controls.Add(lblSorteeri);
                 yleminePaneel.Controls.Add(comboSorteeri);
@@ -302,6 +335,7 @@ namespace Tooded_EFCore
                 yleminePaneel.Controls.Add(chkLaos);
                 yleminePaneel.Controls.Add(lblOstukorv);
                 yleminePaneel.Controls.Add(btnTyhjenda);
+                yleminePaneel.Controls.Add(btnAvaOstukorv);
 
                 // Tootekaartide ala
                 Panel kaartidePaneel = new Panel();
@@ -541,10 +575,8 @@ namespace Tooded_EFCore
                     count++;
                 }
 
-               
                 // OTSINGU, SORTEERIMISE JA
                 // LAOSEISU ÜHINE FUNKTSIOON
-                
 
                 void UuendaKaardid()
                 {
@@ -657,3 +689,4 @@ namespace Tooded_EFCore
         }
     }
 }
+

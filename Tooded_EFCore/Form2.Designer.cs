@@ -64,7 +64,7 @@
             dataGridViewTooted.ReadOnly = true;
             dataGridViewTooted.RowHeadersWidth = 51;
             dataGridViewTooted.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewTooted.Size = new Size(819, 300);
+            dataGridViewTooted.Size = new Size(831, 300);
             dataGridViewTooted.TabIndex = 0;
             // 
             // txtNimetus
@@ -72,7 +72,7 @@
             txtNimetus.Location = new Point(0, -1);
             txtNimetus.Name = "txtNimetus";
             txtNimetus.PlaceholderText = "Toote nimetus";
-            txtNimetus.Size = new Size(200, 23);
+            txtNimetus.Size = new Size(200, 27);
             txtNimetus.TabIndex = 1;
             txtNimetus.TextChanged += txtNimetus_TextChanged;
             // 
@@ -81,7 +81,7 @@
             txtKogus.Location = new Point(0, 32);
             txtKogus.Name = "txtKogus";
             txtKogus.PlaceholderText = "Kogus";
-            txtKogus.Size = new Size(200, 23);
+            txtKogus.Size = new Size(200, 27);
             txtKogus.TabIndex = 2;
             txtKogus.TextChanged += txtKogus_TextChanged;
             // 
@@ -90,7 +90,7 @@
             txtHind.Location = new Point(0, 65);
             txtHind.Name = "txtHind";
             txtHind.PlaceholderText = "Hind €";
-            txtHind.Size = new Size(200, 23);
+            txtHind.Size = new Size(200, 27);
             txtHind.TabIndex = 3;
             // 
             // comboKategooria
@@ -98,7 +98,7 @@
             comboKategooria.DropDownStyle = ComboBoxStyle.DropDownList;
             comboKategooria.Location = new Point(0, 98);
             comboKategooria.Name = "comboKategooria";
-            comboKategooria.Size = new Size(200, 23);
+            comboKategooria.Size = new Size(200, 28);
             comboKategooria.TabIndex = 4;
             // 
             // picturePilt

@@ -11,6 +11,7 @@ namespace Tooded_EFCore
     {
         private readonly ToodedContext _db;
         private string? valitudPilt;
+        private Button btnPood = null!;
 
         public Form2()
         {
@@ -22,6 +23,12 @@ namespace Tooded_EFCore
 
             InitializeComponent();
 
+            // Vormi ja tabeli laiendamine
+            LaiendaVormiJaTabelit();
+
+            // Pood nupu lisamine
+            LisaPoodNupp();
+
             // Värvide kujundamine
             KujundaVarvid();
 
@@ -32,6 +39,37 @@ namespace Tooded_EFCore
 
             LaeKategooriad();
             LaeTooted();
+        }
+
+        // Vormi ja tabeli laiendamine
+        private void LaiendaVormiJaTabelit()
+        {
+            dataGridViewTooted.Anchor =
+                AnchorStyles.Top |
+                AnchorStyles.Bottom |
+                AnchorStyles.Left |
+                AnchorStyles.Right;
+
+            Width += 130;
+        }
+
+        // Pood nupu lisamine
+        private void LisaPoodNupp()
+        {
+            btnPood = new Button();
+
+            btnPood.Name = "btnPood";
+            btnPood.Text = "Pood";
+            btnPood.Size = btnArve.Size;
+
+            btnPood.Location = new Point(
+                btnArve.Right + 15,
+                btnArve.Top
+            );
+
+            btnPood.Click += btnPood_Click;
+
+            btnArve.Parent.Controls.Add(btnPood);
         }
 
         // Vormi värvid
@@ -67,6 +105,7 @@ namespace Tooded_EFCore
             VarviNupp(btnKustuta, Color.FromArgb(220, 53, 69));
             VarviNupp(btnValiPilt, Color.FromArgb(100, 116, 139));
             VarviNupp(btnArve, Color.FromArgb(34, 139, 94));
+            VarviNupp(btnPood, Color.FromArgb(52, 152, 219));
 
             // Pildi taust
             picturePilt.BackColor = Color.White;
@@ -346,6 +385,17 @@ namespace Tooded_EFCore
             using ArveForm arve = new ArveForm();
             arve.SelectedToode = toode;
             arve.ShowDialog();
+        }
+
+        // Pood nupu vajutamine
+        private void btnPood_Click(object sender, EventArgs e)
+        {
+            using Form3 pood = new Form3();
+
+            pood.ShowDialog(this);
+
+            // Toodete tabeli uuendamine pärast poe sulgemist
+            LaeTooted();
         }
     }
 }

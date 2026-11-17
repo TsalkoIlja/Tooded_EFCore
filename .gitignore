@@ -3,3 +3,6 @@
 **/.vs/
 ToodedInstaller/Release/*.msi
 ToodedInstaller/Release/setup.exe
+
+ToodedInstaller/Debug/*.msi
+ToodedInstaller/Debug/setup.exe

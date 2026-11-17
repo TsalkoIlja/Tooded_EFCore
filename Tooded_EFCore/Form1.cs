@@ -50,14 +50,19 @@ namespace Tooded_EFCore
 
                 btnHaldus.Click += (s, e) =>
                 {
-                    if (AktiivneKasutaja.Roll != "admin")
+                    try
                     {
-                        MessageBox.Show("Ligip‰‰s keelatud!");
-                        return;
+                        using Form2 haldus = new Form2();
+                        haldus.ShowDialog();
                     }
-
-                    using Form2 haldus = new Form2();
-                    haldus.ShowDialog();
+                    catch (UnauthorizedAccessException ex)
+                    {
+                        MessageBox.Show(
+                            ex.Message,
+                            "Ligip‰‰s keelatud",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
                 };
 
                 Controls.Add(btnHaldus);
@@ -113,16 +118,19 @@ namespace Tooded_EFCore
 
                 btnLisaKasutaja.Click += (sender, e) =>
                 {
-                    if (AktiivneKasutaja.Roll != "admin")
+                    try
                     {
-                        MessageBox.Show("Ligip‰‰s keelatud!");
-                        return;
+                        using LisaKasutajaForm vorm = new LisaKasutajaForm();
+                        vorm.ShowDialog();
                     }
-
-                    using LisaKasutajaForm vorm =
-                        new LisaKasutajaForm();
-
-                    vorm.ShowDialog();
+                    catch (UnauthorizedAccessException ex)
+                    {
+                        MessageBox.Show(
+                            ex.Message,
+                            "Ligip‰‰s keelatud",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
                 };
 
                 Controls.Add(btnLisaKasutaja);

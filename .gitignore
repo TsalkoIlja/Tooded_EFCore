@@ -1,3 +1,5 @@
 **/bin/
 **/obj/
 **/.vs/
+ToodedInstaller/Release/*.msi
+ToodedInstaller/Release/setup.exe

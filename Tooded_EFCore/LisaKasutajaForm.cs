@@ -101,7 +101,7 @@ namespace Tooded_EFCore
 
         private void btnLisa_Click(object? sender, EventArgs e)
         {
-            string email = txtEmail.Text.Trim();
+            string email = txtEmail.Text.Trim().ToLowerInvariant();
             string parool = txtParool.Text;
 
             if (!MailAddress.TryCreate(email, out _) ||

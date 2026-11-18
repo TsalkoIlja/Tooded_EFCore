@@ -6,3 +6,4 @@ ToodedInstaller/Release/setup.exe
 
 ToodedInstaller/Debug/*.msi
 ToodedInstaller/Debug/setup.exe
+ToodedInstaller/Debug/*.tmp
